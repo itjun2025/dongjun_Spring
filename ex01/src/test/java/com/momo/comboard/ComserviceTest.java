@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.momo.service.ComBoardService;
 import com.momo.vo.ComBoardVO;
@@ -25,11 +26,11 @@ public class ComserviceTest {
 	
 	@Test
 	public void list() {
-		List<ComBoardVO> list = service.getlist();
+		List<ComBoardVO> list = service.getlist(null);
 		list.forEach(board -> {
 			log.info("ComBoardVO============");
 			log.info(board.getCom_bno());
-			log.info(board.getNickname());
+			log.info(board.getNickName());
 			log.info(board.getCom_title());
 			log.info(board.getCom_content());
 			log.info(board.getRegdate() );
@@ -43,10 +44,10 @@ public class ComserviceTest {
 	public void insert() {
 		ComBoardVO vo = new ComBoardVO();
 		
-	    vo.setCom_bno(20);
+	    vo.setCom_bno(220);
 	    vo.setCom_content("내용5");
 	    vo.setCom_title("제목5");
-	    vo.setNickname("닉네임5");
+	    vo.setNickName("닉네임5");
 	    vo.setMno(1);
 	    vo.setRegdate("2023-07-27"); // "YYYY-MM-DD" 형식으로 설정
 	    vo.setUpdate_date("2024-07-27"); // "YYYY-MM-DD" 형식으로 설정
@@ -54,6 +55,25 @@ public class ComserviceTest {
 
 	    int res = service.insert(vo);
 	    assertEquals(1, res);
+	}
+	
+	@Test
+	public void insertSelectKey() {
+		ComBoardVO vo = new ComBoardVO();
+		vo.setCom_bno(16);
+		vo.setCom_title("아이스크림");
+		
+		vo.setCom_content("고기는 물에 1시간 담가주세요 !!");
+		vo.setNickName("매우");
+		
+		vo.setMno(1);
+		
+		
+		int res = service.insertSelectKey(comboard, photos);
+		log.info("===========================");
+		log.info("bno : " + vo.getCom_bno());
+		System.out.println("bno : " + vo.getCom_bno());
+		assertEquals(res, 1);
 	}
 	
 	@Test

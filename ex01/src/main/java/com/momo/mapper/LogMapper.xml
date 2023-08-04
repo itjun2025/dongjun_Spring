@@ -6,9 +6,12 @@
 <!-- mapper의 namespace속성은 연결할 mapper의 interface 풀 경로로 작성  -->
 <mapper namespace="com.momo.mapper.LogMapper">
 
-<insert id="insert">
+<insert id="insert" parameterType="com.momo.vo.ComBoardVO">
 		insert into tbl_log (CLASSNAME,METHODNAME,PARAMS,ERRMSG,REGDATE) 
 		values (#{classname},#{methodname},#{params},#{errmsg},sysdate)
 </insert>
+
+
+
 
 </mapper>

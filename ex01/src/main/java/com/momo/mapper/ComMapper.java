@@ -16,5 +16,9 @@ public interface ComMapper {
 	
 	public int update(ComBoardVO vo);
 	
+	int insertSelectKey(ComBoardVO board);
+	
+	
+	
 	
 }

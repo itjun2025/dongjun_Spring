@@ -28,7 +28,7 @@ public class test {
 		
 		FileuploadVO vo = new FileuploadVO();
 		
-		vo.setBno(83);
+		vo.setCom_bno(140);
 		vo.setFilename("filename");
 		vo.setFiletype("I");
 		vo.setUploadpath("uploadpath");

@@ -138,7 +138,7 @@ public class FileuploadserviceImpl implements Fileuploadservice {
 					vo.setFiletype("F");
 				}
 				
-				vo.setBno(bno);
+				vo.setCom_bno(bno);
 				vo.setFilename(file.getOriginalFilename());
 				//vo.setFiletype("test");
 				vo.setUploadpath(uploadpath);

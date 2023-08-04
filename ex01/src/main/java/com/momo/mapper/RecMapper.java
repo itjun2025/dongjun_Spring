@@ -2,6 +2,7 @@ package com.momo.mapper;
 
 import java.util.List;
 
+import com.momo.vo.BoardVO;
 import com.momo.vo.RecBoardVO;
 
 public interface RecMapper {
@@ -15,5 +16,7 @@ public interface RecMapper {
 	public RecBoardVO getOne(int bno);
 	
 	public int update(RecBoardVO vo);
+	
+	public int insertSelectKey(RecBoardVO board);
 
 }

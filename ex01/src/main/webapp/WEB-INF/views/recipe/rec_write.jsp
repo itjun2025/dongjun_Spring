@@ -78,12 +78,12 @@
 		</div>
 
 
-		<form class="form-control" method="post">
+		<form class="form-control" method="post" action="/recipe1/postWrite">	
 
 		<!-- 제목 입력란  -->
 			<div class="rec_title">
-				<label>레시피 제목 </label> <input type="text"
-					placeholder="예) 학교앞 분식집 떡볶이 만들기">
+				<label>레시피 제목 </label> 
+				<input type="text" name="title" placeholder="예) 학교앞 분식집 떡볶이 만들기" value="${board.title}">
 			</div>
 			
 			<br><br>
@@ -93,18 +93,24 @@
 				<label >요리 소개</label>
 				<textarea
 					placeholder="이 레시피의 탄생배경을 적어주세요. 예)어릴적 학교앞 분식집에서 먹던 떡볶이 맛이 그리우셨다면 한번 만들어보세요~"
-					style="resize: none;"></textarea>
+					name="intro" style="resize: none;">${board.intro }</textarea>
 			</div>
 			
 			<br><br>
+			
+			
+			
+			
 			
 		<!-- 대표사진 파일첨부  -->
 			<div>
 				<label style="display: inline;">대표사진설정하기</label>
 				<i class="bi bi-image" style="display: inline; color: pink;"></i>
-				<input type="file" name="photos" id="photoInput" class="form-control"
-					accept="image/jpeg, image/png" >
+				<input type="file" name="photos" id="photoInput" class="form-control" 
+					 >
 			</div>
+			
+		
 			
 			<br><br>
 			
@@ -126,46 +132,49 @@
 				<label style="display: inline;">카테고리</label>
 				<i class="bi bi-tags" style="display: inline; color: pink;"></i><br>
 				
-				<select name="cate_big" id="cate_big" style="width:200px; height:50px; display: inline;">
-					<option value="big1">대분류</option>
-					<option value="big2">한식</option>
-					<option value="big3">중식</option>
-					<option value="big4">양식</option>
-					<option value="big5">일식</option>
-					<option value="big6">다이어트식</option>
-					<option value="big7">기타음식</option>
+				<input type="text" name="C_NO" value="${vo.C_NO}"><br><br>
+				
+				
+				<select name="bigcate" id="bigcate" style="width:200px; height:50px; display: inline;">
+					<option value="대분류">대분류</option>
+					<option value="한식">한식</option>
+					<option value="중식">중식</option>
+					<option value="양식">양식</option>
+					<option value="일식">일식</option>
+					<option value="다이어트식">다이어트식</option>
+					<option value="기타음식">기타음식</option>
 				</select> 
 				
 				
-				<select name="cate_mid" id="cate_mid" style="width:200px; height:50px; display: inline;">
-					<option value="mid1">중분류</option>
-					<option value="mid2">밥요리</option>
-					<option value="mid3">국,찌개</option>
-					<option value="mid4">면요리</option>
-					<option value="mid5">샐러드</option>
-					<option value="mid6">고기고기</option>
-					<option value="mid7">기타</option>
+				<select name="midcate" id="midcate" style="width:200px; height:50px; display: inline;">
+					<option value="중분류">중분류</option>
+					<option value="밥요리">밥요리</option>
+					<option value=국,찌개>국,찌개</option>
+					<option value="면요리">면요리</option>
+					<option value="샐러드">샐러드</option>
+					<option value="고기고기">고기고기</option>
+					<option value="기타">기타</option>
 				</select> 
 				
-				<select name="cate_sm" id="cate_sm" style="width:200px; height:50px; display: inline;">
-					<option value="sm1">소분류</option>
-					<option value="sm2">재료별</option>
-					<option value="sm3">소고기</option>
-					<option value="sm4">돼지고기</option>
-					<option value="sm5">닭고기</option>
-					<option value="sm6">육류</option>
-					<option value="sm7">채소류</option>
-					<option value="sm8">해물류</option>
-					<option value="sm9">달걀/유제품</option>
-					<option value="sm10">가공식품류</option>
-					<option value="sm11">쌀</option>
-					<option value="sm12">밀가루</option>
-					<option value="sm13">건어물류</option>
-					<option value="sm14">버섯류</option>
-					<option value="sm15">과일류</option>
-					<option value="sm16">콩/견과류</option>
-					<option value="sm17">곡류</option>
-					<option value="sm18">기타</option>
+				<select name="smcate" id="smcate" style="width:200px; height:50px; display: inline;">
+					<option value="소분류">소분류</option>
+					<option value="재료별">재료별</option>
+					<option value="소고기">소고기</option>
+					<option value="돼지고기">돼지고기</option>
+					<option value="닭고기">닭고기</option>
+					<option value="육류">육류</option>
+					<option value="채소류">채소류</option>
+					<option value="해물류">해물류</option>
+					<option value="달걀/유제품">달걀/유제품</option>
+					<option value="가공식품류">가공식품류</option>
+					<option value="쌀">쌀</option>
+					<option value="밀가루">밀가루</option>
+					<option value="건어물류">건어물류</option>
+					<option value="버섯류">버섯류</option>
+					<option value="과일류">과일류</option>
+					<option value="콩/견과류">콩/견과류</option>
+					<option value="곡류">곡류</option>
+					<option value="기타">기타</option>
 				</select>
 			</div>
 
@@ -255,7 +264,7 @@
 			
 			<!--  요리팁  -->
 			<div>
-				<label>요리팁</label> <input type="text"
+				<label>요리팁</label> <input type="text" 	
 					placeholder="떡이 얼려져있다면 미리 해동시켜주세요!!">
 			</div>
 			

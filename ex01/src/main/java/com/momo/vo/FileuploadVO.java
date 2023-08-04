@@ -8,7 +8,7 @@ public class FileuploadVO {
 	private String uploadpath;
 	private String filename;
 	private String filetype;
-	private int bno;
+	private int com_bno;
 	
 	private String savePath;
 	private String s_savePath;

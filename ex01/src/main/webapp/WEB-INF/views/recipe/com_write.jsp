@@ -21,23 +21,40 @@
     <div style="text-align: center; font-size: 30px; font-weight: bold; margin-bottom: 20px; color: darkred;">
         ♨♨♨ 망한요리게시판 ♨♨♨
     </div>
-<form action='<c:url value='/board/boardInsert'/>' method="post" enctype="multipart/form-data">	
+<form action="/comboard/comWriteAction" method="post" enctype="multipart/form-data">	
  
-        <div class="form-group">
+         <div>
               <label for="exampleFormControlInput1">제목</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" name="title" placeholder="제목을 작성해주세요.">
+            <input type="text" class="form-control" id="com_title" name="com_title"
+             value="${board.com_title }" placeholder="제목을 작성해주세요.">
           </div>
        
-          <div class="form-group">
+          <div>
             <label for="exampleFormControlTextarea1">내용</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" name="contents" rows="10" placeholder="내용을 작성해주세요. 비속어는 삼가해주세요 ㅠ"></textarea>
+            <textarea class="form-control" id="com_content" name="com_content" 
+            rows="10" placeholder="내용을 작성해주세요. 비속어는 삼가해주세요 ㅠ">${board.com_content }</textarea>
           </div>
           
-          
+          <div>
+          	<label for="exampleFormControlTextarea1">닉네임</label>
+          	<input type="text" class="form-control" id="nickName" name="nickName" 
+          	value="${board.nickName }" placeholder="닉네임을 작성해주세요.">
+           </div>
+      
+           
            <div>
+          	<label for="exampleFormControlTextarea1">회원번호</label>
+          	<input type="text" class="form-control" id="mno" name="mno" 
+          	value="${board.mno }" placeholder="고유번호를 작성해주세요.">
+           </div>
+       
+           <div>
+           
 		        <label for="exampleFormControlInput1">사진 추가</label>
-		        <input type="file" name="photos" id="photoInput" class="form-control" accept="image/jpeg, image/png" multiple>
-    	   </div>
+		        <input type="file" name="photos" id="photoInput" class="form-control" 
+		        accept="image/jpeg, image/png" multiple="multiple">
+    	   </div> 
+         
     
     <!-- 썸네일을 보여줄 컨테이너 -->
     <div id="thumbnailContainer" style="display: flex; flex-wrap: wrap;"></div>
@@ -46,10 +63,23 @@
           
           
           
+       
+          
           <div style="text-align: center;">
-        <button type="submit" >등록</button>
-        <button type="button" >취소</button>
-          </div>
+		<!-- bno 값이 있으면 수정하기 -->
+				<c:if test="${not empty board.com_bno}" var="res">
+			    	<input type="hidden" name="com_bno" value="${board.com_bno}">
+					<button type="submit" onclick="requestAction('/comboard/editAction')">수정하기</button>
+					
+				</c:if>
+				<!-- 없으면 등록하기 -->
+				<c:if test="${not res}">
+					<button type="submit" >등록하기</button>
+				</c:if>
+		
+		
+				<button type="reset" >초기화</button>
+		</div>
           
            
     

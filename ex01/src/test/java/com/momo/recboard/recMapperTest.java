@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.momo.mapper.RecMapper;
 import com.momo.recboard.recMapperTest;
+import com.momo.vo.BoardVO;
 import com.momo.vo.ComBoardVO;
 import com.momo.vo.RecBoardVO;
 
@@ -52,20 +53,79 @@ public class recMapperTest {
 	public void insert() {
 		
 		RecBoardVO vo = new RecBoardVO();
-		vo.setB_NO(2);
-		vo.setTitle("떡볶이");
-		vo.setNickName("떡볶아줌마");
+		vo.setB_NO(13);
+		vo.setTitle("소불고기");
+		vo.setNickName("소아줌마");
 		vo.setRegdate("2023-07-26");
-		vo.setUpdatedate("2023-07-28");
+		
 		vo.setBoomup(2);
-		vo.setIntro("매우맛있는 떡볶이에요 한번 만들어보세요");
-		vo.setCookTip("떡은 미리 물에 불려놔주세요!!");
-		vo.setViewCnt(0);
-		vo.setStar(0);
-		vo.setC_NO(0);
+		vo.setIntro("매우맛있는 소불고기에요 한번 만들어보세요");
+		vo.setCookTip("고기는 물에 1시간 담가주세요 !!");
+		
 		vo.setMno(1);
 		
 		int res = mapper.insert(vo);
 		assertEquals(1, res);
 	}
+	
+	
+	@Test
+	public void insertSelectKey() {
+		RecBoardVO vo = new RecBoardVO();
+		vo.setB_NO(15);
+		vo.setTitle("아이스크림");
+		
+		vo.setIntro("매우맛있는 소불고기에요 한번 만들어보세요");
+		vo.setCookTip("고기는 물에 1시간 담가주세요 !!");
+		
+		vo.setMno(1);
+		
+		int res = mapper.insertSelectKey(vo);
+		log.info("===========================");
+		log.info("bno : " + vo.getB_NO());
+		System.out.println("bno : " + vo.getB_NO());
+		assertEquals(res, 1);
+	}
+	
+	
+	@Test
+	public void delete() {
+		int res = mapper.delete(4);
+		assertEquals(1, res);
+	}
+	
+	@Test
+	public void getOne() {
+		
+		RecBoardVO board = mapper.getOne(3);
+		System.out.println("=====================");
+		log.info(board);
+		
+	}
+	
+	
+	@Test
+	public void update() {
+		
+		RecBoardVO vo = new RecBoardVO();
+		vo.setB_NO(1);
+		vo.setTitle("제육");
+		vo.setNickName("제육아줌마");
+		vo.setRegdate("2023-07-26");
+		vo.setUpdatedate("2023-07-28");
+		vo.setBoomup(2);
+		vo.setIntro("매우맛있어  한번 만들어보세요");
+		vo.setCookTip("고기는 물에 1시간 담가주세요 !!");
+		vo.setViewCnt(0);
+		vo.setStar(0);
+		vo.setC_NO(0);
+		vo.setMno(1);
+	    
+	    int res = mapper.update(vo);
+	    
+	    
+	    
+	    assertEquals(res,1);
+	}
+	
 }

@@ -176,7 +176,7 @@
 		</c:if>
 		<!-- 없으면 등록하기 -->
 		<c:if test="${not res}">
-			<button type="submit" class="btn btn-primary btn-lg">글쓰기</button>
+			<button type="submit" class="btn btn-primary btn-lg">등록하기</button>
 		</c:if>
 		
 		

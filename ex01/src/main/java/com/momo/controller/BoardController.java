@@ -155,15 +155,6 @@ public class BoardController {
 								, RedirectAttributes rttr
 								, Model model) {
 		
-		//?pageNo=1
-		//request.getParm("pageNo");
-		//request.setAttr("")
-		// ${param.pageNo}
-		
-		//request.getAttr("")
-		//session.setAttr("")
-		//${pageNo}
-		
 		// 수정
 		int res;
 		try {

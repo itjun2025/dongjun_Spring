@@ -13,10 +13,17 @@ select * from com_board
 </select>
 
 <insert id="insert">
+  INSERT INTO com_board(com_bno, nickName, com_title, com_content, mno)
+  VALUES(#{com_bno}, #{nickName}, #{com_title}, #{com_content}, #{mno})
+</insert>
 
-insert into com_board values(#{com_bno},#{nickname},#{com_title},#{com_content}
-						,#{regdate},#{update_date},#{replycnt},#{mno})
 
+<insert id="insertSelectKey">
+  <selectKey keyProperty="com_bno" order="BEFORE" resultType="int">
+    select seq_board.nextval from dual
+  </selectKey>
+  insert into com_board(com_bno, nickName, com_title, com_content, mno) 
+  values(#{com_bno}, #{nickName}, #{com_title}, #{com_content}, #{mno})
 </insert>
 
 <delete id="delete">
@@ -26,7 +33,11 @@ insert into com_board values(#{com_bno},#{nickname},#{com_title},#{com_content}
 
 <select id="getOne" resultType="com.momo.vo.ComBoardVO">
 		select * from com_board where com_bno=#{com_bno}
-	</select>
+</select>
+
+
+
+
 
 <update id="update">
 

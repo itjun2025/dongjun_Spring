@@ -14,33 +14,50 @@
 
 <insert id="insert">
 
-insert into rec_board (B_NO, title, nickName, regdate, updatedate
-						, boomup, intro, cookTip, viewCnt, star, mno, C_NO)
-        	   values (#{B_NO}, #{title}, #{nickName}, #{regdate}, #{updatedate}
-        				, #{boomup}, #{intro}, #{cookTip}, #{viewCnt}, #{star}, #{mno}, #{C_NO})
+insert into rec_board (B_NO, title
+						, intro,  mno)
+        	   values (#{B_NO}, #{title}, 
+        				 #{intro},   #{mno})
 
 </insert>
 
+
+<insert id="insertSelectKey">
+		<selectKey keyProperty="B_NO" order="BEFORE" resultType="int">
+		select seq_board.nextval from dual
+		</selectKey>
+	
+		insert into rec_board (B_NO, title
+						, intro,  mno)
+        	   values (#{B_NO}, #{title}, 
+        				 #{intro},   #{mno})
+	</insert>	
+
 <delete id="delete">
-		delete rec_board where com_bno= #{com_bno}
+		delete rec_board where b_no= #{b_no}
 </delete>
 
 
-<select id="getOne" resultType="com.momo.vo.ComBoardVO">
-		select * from com_board where com_bno=#{com_bno}
+<select id="getOne" resultType="com.momo.vo.RecBoardVO">
+		select * from rec_board where B_NO=#{B_NO}
 	</select>
 
 <update id="update">
 
-update com_board
-	set com_title = #{com_title}
-		   		, title = #{title}
-		   		, nickname = #{nickname}
+update rec_board
+		set 
+		   		 title = #{title}
+		   		, nickName = #{nickName}
 		   		, regdate = #{regdate}
-		   		, update_date  = sysdate
-		   		, replycnt = #{replycnt}
+		   		, updatedate  = sysdate
+		   		, boomup = #{boomup}
+		   		, intro = #{intro}
+		   		, cookTip = #{cookTip}
+		   		, viewCnt = #{viewCnt}
+		   		, star = #{star}
+		   		, C_NO = #{C_NO}
 		   		, mno = #{mno}
-		 where com_bno = #{com_bno}  
+		 where B_NO = #{B_NO}  
 
 </update>
 

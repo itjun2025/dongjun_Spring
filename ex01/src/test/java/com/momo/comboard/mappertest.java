@@ -14,6 +14,7 @@ import com.momo.board.boardTest;
 import com.momo.mapper.ComMapper;
 import com.momo.vo.BoardVO;
 import com.momo.vo.ComBoardVO;
+import com.momo.vo.RecBoardVO;
 
 import lombok.extern.log4j.Log4j;
 
@@ -31,7 +32,7 @@ public class mappertest {
 		list.forEach(board -> {
 			log.info("ComboardVO============");
 			log.info(board.getCom_bno());
-			log.info(board.getNickname());
+			log.info(board.getNickName());
 			log.info(board.getCom_title());
 			log.info(board.getCom_content());
 			log.info(board.getRegdate() );
@@ -44,14 +45,11 @@ public class mappertest {
 	@Test
 	public void insert() {
 	    ComBoardVO vo = new ComBoardVO();
-	    vo.setCom_bno(2);
-	    vo.setCom_content("내용2");
-	    vo.setCom_title("제목2");
-	    vo.setNickname("닉네임2");
+	    vo.setCom_bno(10);
+	    vo.setCom_content("내용3");
+	    vo.setCom_title("제목3");
+	    vo.setNickName("닉네임3");
 	    vo.setMno(1);
-	    vo.setRegdate("2023-07-27"); // "YYYY-MM-DD" 형식으로 설정
-	    vo.setUpdate_date("2024-07-27"); // "YYYY-MM-DD" 형식으로 설정
-	    vo.setReplycnt(13); // 숫자로 설정
 
 	    int res = commapper.insert(vo);
 	    assertEquals(1, res);
@@ -59,8 +57,27 @@ public class mappertest {
 	
 	
 	@Test
+	public void insertSelectKey() {
+		ComBoardVO vo = new ComBoardVO();
+		
+		vo.setCom_title("아이스크림");
+		
+		vo.setCom_content("고기는 물에 1시간 담가주세요 !!");
+		vo.setNickName("매우");
+		
+		vo.setMno(1);
+		
+		int res = commapper.insertSelectKey(vo);
+		log.info("===========================");
+		log.info("bno : " + vo.getCom_bno());
+		System.out.println("bno : " + vo.getCom_bno());
+		assertEquals(res, 1);
+	}
+	
+	
+	@Test
 	public void delete() {
-		int res = commapper.delete(1);
+		int res = commapper.delete(187);
 		assertEquals(1, res);
 	}
 	
@@ -76,12 +93,12 @@ public class mappertest {
 	
 	@Test
 	public void update() {
-		int bno = 11;
+		int bno = 173;
 		ComBoardVO vo = new ComBoardVO();
 		vo.setCom_bno(bno);
 		vo.setCom_content("내용2/1");
 	    vo.setCom_title("제목 수정수정수정");
-	    vo.setNickname("닉네임2/1");
+	    vo.setNickName("닉네임2/1");
 	    vo.setMno(1);
 	    vo.setRegdate("2023-07-28"); // "YYYY-MM-DD" 형식으로 설정
 	   

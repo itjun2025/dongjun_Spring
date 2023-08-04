@@ -4,19 +4,32 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.momo.mapper.ComMapper;
+import com.momo.vo.BoardVO;
+import com.momo.vo.BookVO;
 import com.momo.vo.ComBoardVO;
+import com.momo.vo.Criteria;
+import com.momo.vo.RecBoardVO;
+import com.momo.vo.pageDto;
 
 @Service
 public class ComBoardServiceImpl implements ComBoardService {
 
 	@Autowired
-	ComMapper commapper;
+	private ComMapper commapper;
+	
+	@Autowired
+	private Fileuploadservice fileuploadService;
 	
 	@Override
-	public List<ComBoardVO> getlist() {
-		return commapper.list();
+	public List<ComBoardVO> getlist(Model model) {
+	    List<ComBoardVO> list = commapper.list();
+	    model.addAttribute("list", list);
+	    return list;
 	}
 
 	@Override
@@ -32,15 +45,33 @@ public class ComBoardServiceImpl implements ComBoardService {
 	}
 
 	@Override
-	public ComBoardVO getOne(int bno) {
+	public ComBoardVO getOne(int bno ) {
 		// TODO Auto-generated method stub
 		return commapper.getOne(bno);
 	}
 
 	@Override
-	public int update(ComBoardVO vo) {
+	public int update(ComBoardVO board , List<MultipartFile> photos) throws Exception {
 		// TODO Auto-generated method stub
-		return commapper.update(vo);
+		return commapper.update(board);
+	}
+	
+	
+
+	
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public int insertSelectKey(ComBoardVO board
+								, List<MultipartFile> photos) throws Exception {
+		
+		// 게시물 등록
+		int res = commapper.insertSelectKey(board);
+		
+		// 파일 첨부
+		fileuploadService.fileupload(photos, board.getCom_bno());
+		
+		
+		return res;
 	}
 
 	
