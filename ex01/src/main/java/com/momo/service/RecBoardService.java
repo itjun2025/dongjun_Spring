@@ -17,8 +17,7 @@ public interface RecBoardService {
 	public int insert(RecBoardVO vo);
 	
 	// public int insertSelectKey(RecBoardVO board);
-	public int insertSelectKey(RecBoardVO board, List<MultipartFile> files) 
-			throws Exception;
+	public int insertSelectKey(RecBoardVO board, List<MultipartFile> files) throws Exception;
 	
 	public int delete(int bno);
 	

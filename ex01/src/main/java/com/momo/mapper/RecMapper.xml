@@ -12,25 +12,21 @@
 
 </select>
 
-<insert id="insert">
-
-insert into rec_board (B_NO, title
-						, intro,  mno)
-        	   values (#{B_NO}, #{title}, 
-        				 #{intro},   #{mno})
-
-</insert>
+<insert id="insert" parameterType="com.momo.vo.RecBoardVO">
+        INSERT INTO rec_board (B_NO, title,  intro,   videoUrl ,cookTip)
+        VALUES (SEQ_RECBOARD.nextval, #{title},  #{intro},  #{videoUrl},#{cookTip})
+    </insert>
 
 
 <insert id="insertSelectKey">
 		<selectKey keyProperty="B_NO" order="BEFORE" resultType="int">
-		select seq_board.nextval from dual
+		select seq_recboard.nextval from dual
 		</selectKey>
 	
 		insert into rec_board (B_NO, title
-						, intro,  mno)
+						, intro,   videoUrl , cookTip)
         	   values (#{B_NO}, #{title}, 
-        				 #{intro},   #{mno})
+        				 #{intro},   #{videoUrl},#{cookTip})
 	</insert>	
 
 <delete id="delete">
@@ -57,6 +53,7 @@ update rec_board
 		   		, star = #{star}
 		   		, C_NO = #{C_NO}
 		   		, mno = #{mno}
+		   		, videoUrl = #{videoUrl}
 		 where B_NO = #{B_NO}  
 
 </update>

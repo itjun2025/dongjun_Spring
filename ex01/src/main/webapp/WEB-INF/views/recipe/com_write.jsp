@@ -11,6 +11,17 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css" />
 
+<script type="text/javascript">
+
+//페이지 다시생성
+ function resetbtn() {
+  const isConfirmed = confirm("정말 취소하시겠습니까?");
+  if (isConfirmed) {
+    window.location.href = "/ex/comboard/list"; // 상대 경로로 변경
+  }
+}
+
+</script>
 <body>
  <!-- Header -->
 	<%@ include file="../common2/header.jsp" %>
@@ -21,7 +32,7 @@
     <div style="text-align: center; font-size: 30px; font-weight: bold; margin-bottom: 20px; color: darkred;">
         ♨♨♨ 망한요리게시판 ♨♨♨
     </div>
-<form action="/comboard/comWriteAction" method="post" enctype="multipart/form-data">	
+<form action="/ex/comboard/comWriteAction" method="post" enctype="multipart/form-data">	
  
          <div>
               <label for="exampleFormControlInput1">제목</label>
@@ -78,8 +89,10 @@
 				</c:if>
 		
 		
-				<button type="reset" >초기화</button>
+				<button type="reset" onclick="resetbtn()">취소</button>
 		</div>
+		
+		
           
            
     

@@ -19,6 +19,7 @@ public class RecBoardVO {
 	private int star;
 	private int C_NO;
 	private int mno;
+	 private String videoUrl;
 }
 
 

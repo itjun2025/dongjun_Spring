@@ -7,9 +7,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-div {
-  border: 1px solid black;
-}
+
 .dd{
 	border: 1px solid red;
 }
@@ -20,9 +18,13 @@ div {
 
 </style>
 </head>
+
+<%@ include file="../common2/header.jsp" %>
 <body>
+
+<section id="main" style="border: 3px dashed #ed786a;">
 <h1 style="text-align: center">리스트 페이지</h1>
-<a  href="/comboard/write" role="button">글쓰기 &raquo;</a>
+<a  href="/ex/comboard/write" role="button">글쓰기 &raquo;</a>
  
 			<div class="panel-body">
 
@@ -36,13 +38,13 @@ div {
 							        <th class="dd">등록일</th>
 							        <th class="dd">수정일</th>
 							        <th class="dd">조회수</th>
-							        <th class="dd">회원본호</th>
+							        <th class="dd">회원번호</th>
 							    </tr>
 							</thead>
 							<tbody>
 							    <c:forEach items="${list }" var="vo">
 							        <tr class="odd gradeX">
-							            <td class="dd1"><a href="/comboard/view?com_bno=${vo.com_bno}">${vo.com_bno}</a></td>
+							            <td class="dd1"><a href="/ex/comboard/view?com_bno=${vo.com_bno}">${vo.com_bno}</a></td>
 							            <td class="dd1">${vo.nickName }</td>
 							            <td class="dd1">${vo.com_title }</td>
 							            <td class="dd1">${vo.com_content }</td>
@@ -62,6 +64,10 @@ div {
    
                            
                         </div>
+                        </section>
+                        
+                        
+             <%@ include file="../common2/footer.jsp" %>
                         
                         
 </body>

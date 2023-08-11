@@ -8,7 +8,7 @@
 
 <select id="list" resultType="com.momo.vo.ComBoardVO">
 
-select * from com_board
+select * from com_board order by regdate desc
 
 </select>
 
@@ -20,7 +20,7 @@ select * from com_board
 
 <insert id="insertSelectKey">
   <selectKey keyProperty="com_bno" order="BEFORE" resultType="int">
-    select seq_board.nextval from dual
+    select seq_comboard.nextval from dual
   </selectKey>
   insert into com_board(com_bno, nickName, com_title, com_content, mno) 
   values(#{com_bno}, #{nickName}, #{com_title}, #{com_content}, #{mno})

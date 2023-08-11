@@ -27,9 +27,9 @@ public class ComReplyServiceImpl implements ComReplyService{
 	}
 
 	@Override
-	public int delete(int R_NO) {
+	public int delete(int R_NO ) {
 		// TODO Auto-generated method stub
-		return mapper.delete(R_NO);
+		return mapper.delete(R_NO );
 	}
 
 	@Override
@@ -61,6 +61,18 @@ public class ComReplyServiceImpl implements ComReplyService{
 	public int getCom_bnoCnt(int R_NO) {
 		// TODO Auto-generated method stub
 		return mapper.getCom_bnoCnt(R_NO);
+	}
+
+	@Override
+	public List<ComReplyVO> replydate(int bno) {
+		// TODO Auto-generated method stub
+		return mapper.replydate();
+	}
+
+	@Override
+	public int replyupdate(ComReplyVO com_bno) {
+		// TODO Auto-generated method stub
+		return mapper.replyupdate(com_bno);
 	}
 
 

@@ -14,9 +14,13 @@ public interface ComReplyService {
 	// 댓글 입력
 	public int insert(ComReplyVO vo);
 	// 댓글 삭제
-	public int delete(int bno);
+	public int delete(int R_NO);
 	// 댓글 수정
 	public int update(ComReplyVO vo);
+	
+	public int replyupdate(ComReplyVO com_bno);
+	
+	public List<ComReplyVO> replydate(int bno);
 	
 	
 	

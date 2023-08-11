@@ -12,8 +12,8 @@
 
 	<!-- 댓글 작성 -->
 	<insert id="insert">
-		insert into com_reply (R_NO,  reply, com_bno,mno)
-    	values (SEQ_COMREPLY.nextval, #{reply} , #{com_bno},#{mno})
+		insert into com_reply (R_NO,  reply, com_bno,mno, replylike)
+    	values (SEQ_COMREPLY.nextval, #{reply} , #{com_bno},#{mno}, #{replylike})
 	</insert>
 
 	<!-- 댓글 삭제 -->
@@ -21,6 +21,7 @@
 		delete 
 		from	com_reply
 		where 	R_NO =#{R_NO} 
+		
 	</delete>
 	
 	<!-- 댓글 수정 -->
@@ -31,12 +32,21 @@
 			where R_NO = #{R_NO}
 	</update>
 	
+	<!-- 댓글 좋아요 -->
+	<update id="replyupdate">
+		UPDATE com_reply
+		SET REPLYLIKE = REPLYLIKE + 1
+		WHERE R_NO = *{R_NO}
+	</update>
 	
 	
+	<select id="replydate" resultType="java.util.Map">
+	select * from com_reply order by replydate ;
+	</select>
 	
 	
 	<select id="getMyReplies" resultType="com.momo.vo.ComReplyVO">
-		SELECT R_NO, reply, mno, replydate
+		SELECT R_NO, reply, mno, replydate , replylike
 		FROM com_reply
 		WHERE com_bno = #{com_bno}
 		ORDER BY R_NO DESC
@@ -57,6 +67,8 @@
 	<select id="getCom_bnoCnt" resultType="int">
     	select count(*) from com_reply where com_bno = #{com_bno}
 	</select>
+	
+	
 
 
 

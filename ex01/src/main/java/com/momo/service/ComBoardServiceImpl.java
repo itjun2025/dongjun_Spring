@@ -23,7 +23,7 @@ public class ComBoardServiceImpl implements ComBoardService {
 	private ComMapper commapper;
 	
 	@Autowired
-	private Fileuploadservice fileuploadService;
+	private ComFileService comfileservice;
 	
 	@Override
 	public List<ComBoardVO> getlist(Model model) {
@@ -68,7 +68,7 @@ public class ComBoardServiceImpl implements ComBoardService {
 		int res = commapper.insertSelectKey(board);
 		
 		// 파일 첨부
-		fileuploadService.fileupload(photos, board.getCom_bno());
+		comfileservice.fileupload(photos, board.getCom_bno());
 		
 		
 		return res;

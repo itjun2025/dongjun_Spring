@@ -10,11 +10,14 @@ public interface ComReplyMapper {
 	
 	public List<ComReplyVO> getList();
 	
-	public int insert(ComReplyVO vo);
+	public List<ComReplyVO> replydate();
 	
+	public int insert(ComReplyVO vo);
 	public int delete(int R_NO);
 	
 	public int update(ComReplyVO com_bno);
+	
+	public int replyupdate(ComReplyVO com_bno);
 	
 	
 	

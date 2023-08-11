@@ -44,6 +44,7 @@ public class recMapperTest {
 			log.info(board.getStar());
 			log.info(board.getC_NO());
 			log.info(board.getMno());
+			log.info(board.getVideoUrl());
 			
 		});	
 		
@@ -53,16 +54,13 @@ public class recMapperTest {
 	public void insert() {
 		
 		RecBoardVO vo = new RecBoardVO();
-		vo.setB_NO(13);
+		vo.setB_NO(3);
 		vo.setTitle("소불고기");
-		vo.setNickName("소아줌마");
-		vo.setRegdate("2023-07-26");
 		
-		vo.setBoomup(2);
 		vo.setIntro("매우맛있는 소불고기에요 한번 만들어보세요");
 		vo.setCookTip("고기는 물에 1시간 담가주세요 !!");
 		
-		vo.setMno(1);
+		vo.setVideoUrl("www.naver.com");
 		
 		int res = mapper.insert(vo);
 		assertEquals(1, res);

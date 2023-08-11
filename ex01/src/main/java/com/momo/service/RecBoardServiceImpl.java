@@ -17,8 +17,10 @@ public class RecBoardServiceImpl implements RecBoardService {
 	@Autowired
 	RecMapper recMapper;
 	
+	
+	
 	@Autowired
-	Fileuploadservice fileuploadService;
+	RecFileService fileservice;
 
 	@Override
 	public List<RecBoardVO> getlist() {
@@ -61,7 +63,7 @@ public class RecBoardServiceImpl implements RecBoardService {
 		int res = recMapper.insertSelectKey(board);
 		
 		// 파일 첨부
-		fileuploadService.fileupload(files, board.getB_NO());
+		fileservice.fileupload(files, board.getB_NO());
 		
 		
 		return res;

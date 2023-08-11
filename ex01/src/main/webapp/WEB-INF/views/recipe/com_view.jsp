@@ -6,8 +6,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<!-- Bootstrap JavaScript 로드 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 
 <script type="text/javascript">
@@ -16,7 +19,7 @@ window.addEventListener('load',function(){
 	
 	// 수정페이지로 이동
 	btnEdit.addEventListener('click',function(){
-		viewForm.action='/comboard/edit';
+		viewForm.action='/ex/comboard/edit';
 		viewForm.submit();
 	});
 	
@@ -24,15 +27,19 @@ window.addEventListener('load',function(){
 
 	btnDelete.addEventListener('click', function(){
 	    if (confirm("정말로 삭제하시겠습니까?")) {
-	        viewForm.action='/comboard/delete'; // 수정된 부분
+	        viewForm.action='/ex/comboard/delete'; // 수정된 부분
 	        viewForm.submit();
 	    }
+	    alert('정상적으로 삭제되었습니다.')
 	});
 
 	document.getElementById("btnList").addEventListener('click', function(){
-	    viewForm.action='/comboard/postList';
+	    viewForm.action='/ex/comboard/postList';
 	    viewForm.submit();
 	});
+	
+	
+	
 	
 	
 	
@@ -72,7 +79,82 @@ document.getElementById("btnReplyWrite").addEventListener("click", function() {
         }
     });
 });
-	
+
+
+function editReply(replyNumber) {
+    // 댓글 수정 버튼이 클릭되었을 때 실행되는 함수입니다.
+    // replyNumber를 통해 수정할 댓글의 정보를 서버에서 가져오는 AJAX 요청을 보냅니다.
+    $.ajax({
+        url: '/comboard/getReply', // 서버에서 댓글 정보를 가져올 엔드포인트 URL로 수정해야 합니다.
+        type: 'POST',
+        data: { replyNumber: replyNumber },
+        success: function(response) {
+            if (response.result === 'success') {
+                // 서버로부터 받아온 댓글 정보를 이용하여 수정할 댓글을 표시하는 로직을 작성합니다.
+                // 예를 들어, 모달 창에 댓글 내용을 입력할 수 있는 폼을 표시하는 방식으로 구현할 수 있습니다.
+                // 이때, 댓글 내용을 수정하는 서버 요청을 보내는 로직도 포함되어야 합니다.
+            } else {
+                alert('댓글 정보를 가져오는데 실패하였습니다.');
+            }
+        },
+        error: function(xhr, status, error) {
+            alert('댓글 정보를 가져오는 중 오류가 발생하였습니다.');
+        }
+    });
+}
+
+
+
+
+function deleteReply(replyNumber) {
+    if (confirm("정말로 삭제하시겠습니까?")) {
+        $.ajax({
+            url: '/comboard/deleteReply',
+            type: 'POST',
+            data: { R_NO: replyNumber }, // 댓글 번호를 'R_NO'라는 이름으로 파라미터 전달
+            success: function(response) {
+                // 성공적으로 삭제된 경우
+                if (response.result === 'success') {
+                    alert('댓글이 정상적으로 삭제되었습니다.');
+                    location.reload();
+                } else {
+                    alert('댓글 삭제에 실패하였습니다.');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('댓글 삭제 중 오류가 발생하였습니다.');
+            }
+        });
+    }
+}
+
+
+function likeReply(replyNumber) {
+    // 좋아요 처리 로직
+    $.ajax({
+        url: '/ex/comboard/likeReply',
+        type: 'POST',
+        data: { R_NO: replyNumber },
+        success: function(response) {
+            if (response.result === 'success') {
+                // 성공 처리 로직
+                var likeCountElement = document.querySelector(`[data-reply-like="${replyNumber}"]`);
+                var likeCount = parseInt(likeCountElement.textContent);
+                likeCountElement.textContent = likeCount + 1;
+            } else {
+                // 실패 처리 로직
+                alert('좋아요 처리에 실패하였습니다.');
+            }
+        },
+        error: function(xhr, status, error) {
+            // 에러 처리 로직
+            alert('좋아요 처리 중 오류가 발생하였습니다.');
+        }
+    });
+}
+
+
+
    
 	
 });
@@ -111,13 +193,16 @@ document.getElementById("btnReplyWrite").addEventListener("click", function() {
 	</div>
 	
 	
-	<!-- 이미지 표시 -->
-         	<div>
-                <label for="exampleFormControlInput1">사진</label><br>
-                <c:forEach items="${board.photos}" var="photo">
-                    <img src="${photo}" style="max-width: 200px; max-height: 200px; margin-right: 10px;" />
-                </c:forEach>
-            </div>
+	
+         <c:if test="${not empty vo}">
+		    <!-- 이미지 표시 -->
+		    <div>
+		        <label for="exampleFormControlInput1">사진</label><br>
+		        <img src="${vo.uploadpath}" alt="Image">
+		    </div>
+		</c:if>
+            
+            
 	
 		 <div style="text-align: center;">
 	        <button type="button" id="btnEdit">수정</button>
@@ -127,12 +212,21 @@ document.getElementById("btnReplyWrite").addEventListener("click", function() {
 	
 	<input type="hidden" name="com_bno" value="${board.com_bno}">
 	
+	<c:forEach items="${fileList}" var="file">
+    <input type="text" name="filename" value="${file.filename}" readonly>
+</c:forEach>
 	
 	
 	
 </form>
 
-<input type="text" id="replyer" value="" placeholder="닉네임표시">
+
+<input type="text" id="replyer" value="" placeholder="닉네임표시" style="width: 100px;">
+<!-- 좋아요순 체크박스 -->
+좋아요순 <input type="checkbox" id="likeSortCheckbox">
+
+<!-- 최신순 체크박스 -->
+최신순 <input type="checkbox" id="latestSortCheckbox">
  
   
   <div class="input-group">
@@ -153,24 +247,35 @@ document.getElementById("btnReplyWrite").addEventListener("click", function() {
         <table class="table text-break text-center">
             <thead>
                 <tr>
-                    <th scope="col" class="col-1">#</th>
-                    <th scope="col" class="col-9">댓글</th>
-                    <th scope="col" class="col-2">작성자</th>
+                    <th scope="col" class="col-1"style="text-align: center;">#</th>
+                    <th scope="col" class="col-9" style="text-align: center;">댓글</th>
+                    <th scope="col" class="col-2"style="text-align: center;">회원번호</th>
+                    <th scope="col" class="col-9" style="min-width: 150px; text-align: center;">작성일</th>
+                    <th scope="col" class="col-5"style="min-width: 80px ;text-align: center;">좋아요</th>
                 </tr>
             </thead>
             <tbody>
                 <c:forEach items="${myReplies}" var="reply">
-                    <tr>
-                        <td>${reply.getR_NO()}</td>
-                        <td>${reply.getReply()}</td>
-                        <td>${reply.getMno()}</td>
-                    </tr>
-                </c:forEach>
+				    <tr>
+				        <td>${reply.getR_NO()}</td>
+				        <td>
+				            ${reply.getReply()}
+				            <button type="button" class="btn btn-primary" onclick="editReply(${reply.getR_NO()})">수정</button>
+				            <button type="button" class="btn btn-danger" onclick="deleteReply(${reply.getR_NO()})">삭제</button>
+				        </td>
+				        <td>${reply.getMno()}</td>
+				        <td>${reply.getReplydate()}</td>
+				        <td>
+						    ${reply.getReplylike()}
+						    <i class="bi bi-emoji-heart-eyes" style="margin-left: 5px; cursor: pointer;"
+						        onclick="likeReply(${reply.getR_NO()})"></i>
+						</td>
+				    </tr>
+				</c:forEach>
             </tbody>
         </table>
     </c:otherwise>
 </c:choose>
-
 </section>
 
 <!-- Footer -->

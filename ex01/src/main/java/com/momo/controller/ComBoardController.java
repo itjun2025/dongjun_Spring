@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.momo.service.ComBoardService;
+import com.momo.service.ComFileService;
 import com.momo.service.ComReplyService;
 import com.momo.vo.ComBoardVO;
+import com.momo.vo.ComFileVO;
 import com.momo.vo.ComReplyVO;
 
 import lombok.extern.log4j.Log4j;
@@ -34,6 +38,9 @@ public class ComBoardController {
 	
 	 @Autowired
 	ComReplyService replyService;
+	 
+	 @Autowired
+	 ComFileService fileservice;
 	
 	
 	// 리스트 페이지 ------------------------------------------------
@@ -51,6 +58,15 @@ public class ComBoardController {
 	    model.addAttribute("list", list);
 	    
 	    return "/recipe/com_list";
+	}
+	
+	
+	// 글쓰기 페이지  -------------------------------------------------
+	
+	@GetMapping("/write")
+	public String writepage() {
+		
+		return "/recipe/com_write";
 	}
 	
 	
@@ -88,22 +104,19 @@ public class ComBoardController {
 	
 	
 	
-	// 글쓰기 페이지  -------------------------------------------------
-	
-	@GetMapping("/write")
-	public String writepage() {
-		
-		return "/recipe/com_write";
-	}
 	
 	
 	// 상세보기 페이지 + 댓글  -------------------------------------------------
 	
 	@GetMapping("/view")
-	public String viewBoard(@RequestParam("com_bno") int com_bno, Model model) {	
+	public String viewBoard(@RequestParam("com_bno") int com_bno, Model model) {
 	    // 게시글 정보 조회
 	    ComBoardVO board = service.getOne(com_bno);
 	    model.addAttribute("board", board);
+
+	    // ComFileVO 객체들 가져오기 (여러 개의 사진을 가져올 수 있으므로 List로 저장)
+	    List<ComFileVO> fileList = fileservice.getList(com_bno);
+	    model.addAttribute("fileList", fileList);
 
 	    // 내가 작성한 댓글 목록 조회
 	    List<ComReplyVO> myReplies = replyService.getMyReplies(com_bno);
@@ -116,29 +129,9 @@ public class ComBoardController {
 	}
 	
 	
-	@PostMapping("/replyInsert")
-	@ResponseBody
-	public Map<String, Object> insert(@RequestBody ComReplyVO vo) {
-	    log.info("================= insert");
-	    log.info("replyVO" + vo);
-	    Map<String, Object> map = new HashMap<String, Object>();
-
-	    try {
-	        int res = replyService.insert(vo);
-	        if (res > 0) {
-	            map.put("result", "success");
-	            map.put("message", "댓글이 등록되었습니다.");
-	        } else {
-	            map.put("result", "fail");
-	            map.put("message", "댓글 등록에 실패하였습니다.");
-	        }
-	    } catch (Exception e) {
-	        map.put("result", "error");
-	        map.put("message", e.getMessage());
-	    }
-
-	    return map;
-	}
+	
+	
+	
 	
 	
 	// 상세보기 게시글 삭제  -------------------------------------------------
@@ -155,7 +148,7 @@ public class ComBoardController {
 		    return "redirect:/comboard/list";
 		}
 		
-	// 수정 페이지로 이동
+	// 수정 페이지로 이동 ---------------------------------------------------
 	
 		@PostMapping("/edit")
 	    public String editpage(@RequestParam("com_bno") int com_bno, Model model) {
@@ -164,14 +157,14 @@ public class ComBoardController {
 	        return "/recipe/com_write";
 	    }
 		
-	
-	    	// 수정 처리 (POST 방식)
-	        @PostMapping("/editAction")
-	        public String editAction(ComBoardVO comboard,
-	                                 @RequestParam("com_bno") int com_bno,
-	                                 @RequestParam("photos") List<MultipartFile> photos,
-	                                 RedirectAttributes rttr,
-	                                 Model model) {
+
+    	// 수정 처리 (POST 방식)
+        @PostMapping("/editAction")
+        public String editAction(ComBoardVO comboard,
+                                 @RequestParam("com_bno") int com_bno,
+                                 @RequestParam("photos") List<MultipartFile> photos,
+                                 RedirectAttributes rttr,
+                                 Model model) {
 
 	            // 수정
 	            int res;
@@ -200,6 +193,69 @@ public class ComBoardController {
 	                return "/comboard/message";
 	            }
 	        }
+	        
+	        
+	        // 댓글 등록 ----------------------------------------------------------------
+	        
+	        @PostMapping("/replyInsert")
+	        @ResponseBody
+	        public Map<String, Object> insert(@RequestBody ComReplyVO vo) {
+	        	log.info("================= insert");
+	        	log.info("replyVO" + vo);
+	        	Map<String, Object> map = new HashMap<String, Object>();
+	        	
+	        	try {
+	        		int res = replyService.insert(vo);
+	        		if (res > 0) {
+	        			map.put("result", "success");
+	        			map.put("message", "댓글이 등록되었습니다.");
+	        		} else {
+	        			map.put("result", "fail");
+	        			map.put("message", "댓글 등록에 실패하였습니다.");
+	        		}
+	        	} catch (Exception e) {
+	        		map.put("result", "error");
+	        		map.put("message", e.getMessage());
+	        	}
+	        	
+	        	return map;
+	        }
+	        
+	        
+	        // 댓글 수정 
+	        @PostMapping("/getReply")
+	        public String replyEdit(ComReplyVO vo) {
+	        	
+	        	replyService.update(vo);
+	        	
+	        	return "";
+	        }
+	        
+	        // 댓글 삭제
+	        @PostMapping("/deleteReply")
+	        public String replyDelete( @RequestParam("R_NO") int R_NO
+	        							, RedirectAttributes rttr) {
+	            int res = replyService.delete(R_NO);
+	            if (res > 0) {
+	                rttr.addFlashAttribute("msg", "댓글이 성공적으로 삭제되었습니다.");
+	            } else {
+	                rttr.addFlashAttribute("msg", "댓글 삭제 중 오류가 발생하였습니다.");
+	            }
+	            return "redirect:/comboard/list";
+	        }
+	        
+	        
+	        @PostMapping("/likeReply")
+	        public void likeReply(ComReplyVO com_bno , RedirectAttributes rttr ) {
+	        	
+	        	int res = replyService.replyupdate(com_bno);
+	        	if (res > 0) {
+	                rttr.addFlashAttribute("msg", "댓글이 성공적으로 삭제되었습니다.");
+	            } else {
+	                rttr.addFlashAttribute("msg", "댓글 삭제 중 오류가 발생하였습니다.");
+	            }
+	        }
+	        
 	    }
 	    
 

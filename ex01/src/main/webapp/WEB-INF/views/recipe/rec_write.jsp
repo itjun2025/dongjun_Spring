@@ -14,51 +14,57 @@
 	
 <!-- Bootstrap JavaScript 로드 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
+
+	
    
 	// 재료추가버튼 함수
-	   function addMaterial() {
-	        var ul = document.getElementById('material');
-	        var newLi = document.createElement('li');
-	     	// 새롭게 추가
-	        newLi.innerHTML = 
-	        `
-	          <input type="text" name="material[]"  
-	          				style="display: inline-block; width: 280px;" placeholder="예) 간마늘">
-	          
-	          <input type="text" name="material[]"  
-	          				style="display: inline-block; width: 280px;" placeholder="예) 2큰술">
-	        `;
-	        ul.appendChild(newLi);
-	      }
-    
+	let counter = 1;
+
+function addMaterial() {
+    var container = document.getElementById('dd');
+    var newInputsContainer = document.createElement('div');
+    newInputsContainer.innerHTML =
+        `
+        <div>
+            <input type="text" name="I_NAME${counter + 1}" id="I_NAME${counter + 1}" style="display: inline-block; width: 280px;" placeholder="예) 돼지고기">
+            <input type="text" name="materialCnt${counter + 1}" id="materialCnt${counter + 1}" style="display: inline-block; width: 280px;" placeholder="예) 300g">
+        </div>
+        <br>
+        `;
+    container.appendChild(newInputsContainer);
+
+    // 재료 추가 버튼을 새로 생성된 폼 뒤에 추가
+    container.appendChild(document.querySelector('button'));
+    counter++;
+}
     
     
 	// 순서추가버튼 함수
-	function addCookStep() {
-			var cookStep = document.getElementById('cookStep');
-			var newCookstep = document.createElement('div'); // 새로운 cookstep div를 생성
-		 	 
+	let step = 1;
 
-			  // 새롭게 추가
-			  newCookstep.innerHTML =
-			  `
-			    <p>step</p>
-			    <textarea placeholder="예) 떡볶이는 미리 물에 담궈놔 주세요~" 
-			    				style="display: inline-block; width: 450px; resize: none;">
-			    </textarea>     
-			    <input type="file" name="files" style="display: inline-block;"><br>
-			  `;
-	
-			  // 새로운 cookstep div를 기존 cookStep 맨 뒤에 추가
-			  cookStep.appendChild(newCookstep);
-		  
-		}
+function addCookStep() {
+    var cookStep = document.getElementById('cookStep');
+    var newCookstep = document.createElement('div');
+
+    newCookstep.innerHTML =
+        `
+        <p>step ${step}</p>
+        <textarea placeholder="예) 떡볶이는 미리 물에 담궈놔 주세요~" name="step_content${step + 1}" style="display: inline-block; width: 450px; resize: none;"></textarea>
+        <input type="file" name="photos${step + 1}" multiple="multiple" style="display: inline-block;" ><br>
+        `;
+
+    cookStep.appendChild(newCookstep);
+
+    step++;
+}
 	// 페이지 다시생성
 	function redirectToRecipeWrite() {
-	    window.location.href = "http://localhost:8080/recipe1/write"; // 새로운 페이지로 이동할 URL을 입력하세요.
+	    window.location.href = "http://localhost:8080/ex/recipe1/rec_write"; // 새로운 페이지로 이동할 URL을 입력하세요.
 	  }
     
+	
  
    
     
@@ -78,7 +84,7 @@
 		</div>
 
 
-		<form class="form-control" method="post" action="/recipe1/postWrite">	
+		<form class="form-control" method="post" action="/ex/recipe1/postWrite" enctype="multipart/form-data"> >	
 
 		<!-- 제목 입력란  -->
 			<div class="rec_title">
@@ -104,10 +110,9 @@
 			
 		<!-- 대표사진 파일첨부  -->
 			<div>
-				<label style="display: inline;">대표사진설정하기</label>
-				<i class="bi bi-image" style="display: inline; color: pink;"></i>
-				<input type="file" name="photos" id="photoInput" class="form-control" 
-					 >
+			    <label style="display: inline;">대표사진설정하기</label>
+			    <i class="bi bi-image" style="display: inline; color: pink;"></i>
+			    <input type="file" name="photos" class="form-control" multiple="multiple">
 			</div>
 			
 		
@@ -120,8 +125,8 @@
 				<i class="bi bi-camera-reels" style="display: inline; color: pink;"></i>
 			</div>
 			<textarea
-				placeholder="동영상이 있으면 주소를 입력하세요. 예)http://youtu.be/lA0Bxo3IZmM"
-				style="height: 100px; width: 380px; resize: none;"></textarea>
+				placeholder="동영상이 있으면 주소를 입력하세요. 예)http://youtu.be/lA0Bxo3IZmM" name="videoUrl"
+				style="height: 100px; width: 380px; resize: none;">${board.videoUrl }</textarea>
 				
 				
 			<br><br>
@@ -132,7 +137,7 @@
 				<label style="display: inline;">카테고리</label>
 				<i class="bi bi-tags" style="display: inline; color: pink;"></i><br>
 				
-				<input type="text" name="C_NO" value="${vo.C_NO}"><br><br>
+				
 				
 				
 				<select name="bigcate" id="bigcate" style="width:200px; height:50px; display: inline;">
@@ -182,105 +187,76 @@
 			<br><br>
 			
 			<!-- 재료 ( 재료명 / 계량 ) -->
+			
 
-				<div>
-					<label for="exampleFormControlInput1" 
-						   style="display: inline">재료 (재료이름과 정확한계량을 입력해주세요!!)
-					</label>
-					<i class="bi bi-egg-fried" style="display: inline; color:pink;"></i>
-					<ul id="material" >
-					
-						<li >
-							<input type="text"
-							name="material1_1" id="material1_1"
-							style="display: inline-block; width: 280px;"
-							placeholder="예) 돼지고기"> 
-							
-							<input type="text"
-							name="material1_2" id="material1_2"
-							style="display: inline-block; width: 280px;"
-							placeholder="예) 300g">
-						</li>
-						
-						
-						<li>
-							<input type="text"
-							name="material2_1" id="material2_1"
-							style="display: inline-block; width: 280px;"
-							placeholder="예) 양배추"> 
-							
-							<input type="text"
-							name="material2_2" id="material2_2"
-							style="display: inline-block; width: 280px;"
-							placeholder="예) 1/2개">
-						</li>
-							
-						<li>
-							<input type="text"
-							name="material3_1" id="material3_1"
-							style="display: inline-block; width: 280px;"
-							placeholder="예) 참기름"> 
-							
-							<input type="text"
-							name="material3_1" id="material3_2"
-							style="display: inline-block; width: 280px;"
-							placeholder="예) 1T">
-						</li>
-						
-					</ul>
-				
-					<!-- 재료추가 버튼을 누르면 박스2개 생성! -->
-					<button type="button" onclick="addMaterial()">
-						<span >재료추가</span>
-					</button>
-
+				<div id="dd">
+				    <label for="exampleFormControlInput1" style="display: inline">재료 (재료이름과 정확한계량을 입력해주세요!!)</label>
+				    <i class="bi bi-egg-fried" style="display: inline; color:pink;"></i>
+				    <div>
+				        <input type="text" name="I_NAME"  id="I_NAME1" style="display: inline-block; width: 280px;" 
+				        placeholder="예) 돼지고기" value="${matvo1.I_NAME}">
+				        <input type="text" name="materialCnt" id="materialCnt1" style="display: inline-block; width: 280px;" 
+				        placeholder="예) 300g" value="${matvo1.materialCnt}">
+				    </div>
+				    <br>
+				    <div>
+				        <input type="text" name="I_NAME"  id="I_NAME2" style="display: inline-block; width: 280px;" 
+				        placeholder="예) 양배추" value="${matvo2.I_NAME}">
+				        <input type="text" name="materialCnt" id="materialCnt2" style="display: inline-block; width: 280px;" 
+				        placeholder="예) 1/2개" value="${matvo2.materialCnt}">
+				    </div>
+				    <br>
+				    <div>
+				        <input type="text" name="I_NAME"  id="I_NAME3" style="display: inline-block; width: 280px;" 
+				        placeholder="예) 참기름" value="${matvo3.I_NAME}">
+				        <input type="text" name="materialCnt" id="materialCnt3" style="display: inline-block; width: 280px;" 
+				        placeholder="예) 1T" value="${matvo3.materialCnt}">
+				    </div>
+				    <br>
+				    <!-- 재료추가 버튼을 누르면 박스2개 생성! -->
+				    <button type="button" onclick="addMaterial()">
+				        <span>재료추가</span>
+				    </button>
 				</div>
 
 
 
 			<!-- 요리순서 -->
 			
-    <label>요리순서</label>
-    		
-    		
+    	<!-- 요리순서 -->
+			<label>요리순서</label>
+			<div id="cookStep">
+			    <p>step </p>
+			    <textarea placeholder="예) 떡볶이는 미리 물에 담궈놔 주세요~" name="step_content" style="display: inline-block; width: 450px; resize: none;"></textarea>
+			    <input type="file" name="photos" multiple="multiple" style="display: inline-block;"><br>
+			</div>
 			
-			    <div id="cookStep" >
-			        <p>step 1</p>
-			        <textarea placeholder="예) 떡볶이는 미리 물에 담궈놔 주세요~" 
-			        		  style="display: inline-block; width: 450px; resize: none;"></textarea>
-			        <input type="file" name="files" style="display: inline-block;"><br>
-			    </div>
-		
-			
-
 			<!-- 순서추가 버튼 -->
 			<div>
-				<button type="button" onclick="addCookStep()">순서추가</button>
+			    <button type="button" onclick="addCookStep()">순서추가</button>
 			</div>
-
-
-			<br><br>
+				
+				<br><br>
 			
 			
 			<!--  요리팁  -->
 			<div>
-				<label>요리팁</label> <input type="text" 	
-					placeholder="떡이 얼려져있다면 미리 해동시켜주세요!!">
+				<label>요리팁</label> <input type="text" 	name="cookTip"
+					placeholder="떡이 얼려져있다면 미리 해동시켜주세요!!" value="${board.cookTip}">
 			</div>
 			
 			
 			<br><br>
 			
 			
-			<!--  태그 -->
 			<div>
-				<label>태그</label> <input type="text"
-					placeholder="예) #떡볶이  #어묵  #고추장 ">
+				<label>요리 완성사진</label>
+				<input type="file" name="photos" id="photoInput" class="form-control" 
+					multiple="multiple" >
 			</div>
-
-
-			<br><br>
-
+			
+			
+			
 
 			
 			
@@ -301,7 +277,7 @@
 						</div>
 						<div class="modal-body">
 							<!-- 미리보기 내용 -->
-							<iframe src="http://localhost:8080/recipe1/write" width="100%" height="600"></iframe>
+							<iframe src="http://localhost:8080/ex/recipe1/rec_write" width="100%" height="600"></iframe>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>

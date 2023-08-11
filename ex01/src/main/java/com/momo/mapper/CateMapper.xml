@@ -15,8 +15,8 @@
 
 <insert id="insert">
 
-insert into cate (C_NO , bigcate, midcate, smcate)
-        	   values (#{C_NO}, #{bigcate}, #{midcate}, #{smcate} )
+insert into cate ( bigcate, midcate, smcate)
+        	   values ( #{bigcate}, #{midcate}, #{smcate} )
 
 </insert>
 

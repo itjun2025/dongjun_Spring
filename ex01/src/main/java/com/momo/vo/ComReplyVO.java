@@ -12,5 +12,6 @@ public class ComReplyVO {
 	private String reply;
 	private int com_bno;
 	private int mno;
+	private int replylike;
 
 }
